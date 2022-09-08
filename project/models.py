@@ -9,10 +9,12 @@ class Genre(models.Base):
 
     name = Column(String(100), unique=True, nullable=False)
 
+
 class Director(models.Base):
     __tablename__ = 'directors'
 
     name = Column(String(100), unique=True, nullable=False)
+
 
 class Movie(models.Base):
     __tablename__ = 'movies'
@@ -26,6 +28,8 @@ class Movie(models.Base):
     genre = relationship('Genre')
     director_id = Column(Integer, ForeignKey('directors.id'), nullable=False)
     director = relationship('Director')
+    users = relationship('FavouriteMovie', back_populates='movie')
+
 
 class User(models.Base):
     __tablename__ = "users"
@@ -34,11 +38,14 @@ class User(models.Base):
     password = Column(String, nullable=False)
     name = Column(String)
     surname = Column(String)
-    # favorite_genre_id = Column(Integer, ForeignKey('genres.id'))
-    favorite_genre = Column(Integer)
+    favourite_genre = Column(Integer, ForeignKey('genres.id'))
+    movies = relationship('FavouriteMovie', back_populates='user')
 
-class FavoritesMovie(models.Base):
+
+class FavouriteMovie(models.Base):
     __tablename__ = "favorites"
 
     user_id = Column(Integer, ForeignKey("users.id"))
     movie_id = Column(Integer, ForeignKey('movies.id'))
+    movie = relationship('Movie')
+    user = relationship('User')

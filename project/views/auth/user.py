@@ -6,11 +6,12 @@ from project.setup.api.models import user
 
 api = Namespace('user')
 
+
 @api.route('/')
 class UserView(Resource):
 
     @auth_required
-    @api.marshal_with(user,code=200, description="OK")
+    @api.marshal_with(user, code=200, description="OK")
     def get(self):
         """Получаем профиль пользователя"""
         token = request.headers['Authorization'].split("Bearer ")[-1]
@@ -27,18 +28,16 @@ class UserView(Resource):
         token = request.headers['Authorization'].split("Bearer ")[-1]
         return user_service.partial_update(req_json, token), 204
 
+
 @api.route('/password')
 class PasswordView(Resource):
 
     @auth_required
-    @api.marshal_with(user, code=204)
     def put(self):
         """Обновляем пароль пользователя"""
         req_json = request.json
-        password_1 = req_json.get('password_1')
-        password_2 = req_json.get('password_2')
+        old_password = req_json.get('old_password')
+        new_password = req_json.get('new_password')
         token = request.headers['Authorization'].split("Bearer ")[-1]
-        return user_service.update_password(password_1, password_2, token)
-
-
-
+        user_service.update_password(old_password, new_password, token)
+        return "", 204

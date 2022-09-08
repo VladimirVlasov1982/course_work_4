@@ -6,4 +6,3 @@ page_parser.add_argument(name='page', type=int, location='args', required=False)
 movie_parser: RequestParser = RequestParser()
 movie_parser.add_argument(name='page', type=int, location='args', required=False)
 movie_parser.add_argument(name='status', type=str, location='args', required=False)
-

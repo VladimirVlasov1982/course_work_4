@@ -22,4 +22,5 @@ def auth_required(func: Callable) -> Callable:
             print("JWT Decode Error", e)
             abort(401)
         return func(*args, **kwargs)
+
     return wrapper

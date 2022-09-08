@@ -10,9 +10,11 @@ class DirectorsService:
         self.dao = dao
 
     def get_item(self, pk: int) -> Director:
+        # Получение режиссера по id
         if director := self.dao.get_by_id(pk):
             return director
-        raise ItemNotFound(f" Item {pk} not found")
+        raise ItemNotFound(f'Directors with pk={pk} not exists.')
 
     def get_all(self, page: Optional[int] = None) -> list[Director]:
+        # Получение всех режиссеров
         return self.dao.get_all(page=page)

@@ -2,7 +2,7 @@ import calendar
 import datetime
 
 import jwt
-
+from project.tools import compare_password
 from project.services.users_service import UserService
 from flask_restx import abort
 from flask import current_app
@@ -13,19 +13,20 @@ class AuthService:
         self.user_service = user_service
 
     def generate_tokens(self, mail: str, password: str, is_refresh=False) -> dict[str, str | int]:
+        # Генерация токена
         user = self.user_service.get_user(mail)
 
         if user is None:
             raise abort(404)
 
         if not is_refresh:
-            if not self.user_service.compare_password(user.password, password):
+            if not compare_password(user.password, password):
                 abort(400)
 
         data = {
             "name": user.name,
             "surname": user.surname,
-            "favorite_genre": user.favorite_genre,
+            "favourite_genre": user.favourite_genre,
             "email": user.email,
         }
 
@@ -61,8 +62,3 @@ class AuthService:
 
         mail = data.get('email')
         return self.generate_tokens(mail, None, is_refresh=True)
-
-
-
-
-

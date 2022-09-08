@@ -24,7 +24,7 @@ class BaseConfig:
     RESTX_JSON = {
         'ensure_ascii': False,
     }
-    os.environ['FLASK_ENV'] = "development"
+    os.environ['FLASK_ENV'] = "testing"
 
 
 class TestingConfig(BaseConfig):
