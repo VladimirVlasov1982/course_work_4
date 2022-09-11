@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import patch
-
 from project.exceptions import ItemNotFound
 from project.models import Movie
 from project.services import MoviesService

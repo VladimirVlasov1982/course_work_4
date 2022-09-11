@@ -13,9 +13,6 @@ class UserService:
         # Добавление нового пользователя
         if not user_data:
             abort(400)
-        user = self.dao.get_user(user_data.get('email'))
-        if user:
-            raise ValueError("Пользователь с таким email уже существует")
         user_data['password'] = generate_password_hash(user_data['password'])
         return self.dao.create(user_data)
 

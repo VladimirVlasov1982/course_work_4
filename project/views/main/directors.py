@@ -1,5 +1,4 @@
 from flask_restx import Resource, Namespace
-
 from project.setup.api.models import director
 from project.setup.api.parsers import page_parser
 from project.container import director_service

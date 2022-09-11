@@ -7,6 +7,7 @@ from project.models import Genre
 from project.services import GenresService
 
 
+
 class TestGenresService:
 
     @pytest.fixture()
@@ -43,7 +44,6 @@ class TestGenresService:
     @pytest.mark.parametrize('page', [1, None], ids=['with page', 'without page'])
     def test_get_genres(self, genres_dao_mock, genres_service, page):
         genres = genres_service.get_all(page=page)
-        print(genres)
         assert len(genres) == 2
         assert genres == genres_dao_mock.get_all.return_value
         genres_dao_mock.get_all.assert_called_with(page=page)

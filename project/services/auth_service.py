@@ -1,6 +1,5 @@
 import calendar
 import datetime
-
 import jwt
 from project.tools import compare_password
 from project.services.users_service import UserService

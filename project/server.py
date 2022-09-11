@@ -15,6 +15,7 @@ def create_app(config_obj):
     app.config.from_object(config_obj)
     app.url_map.strict_slashes = False
 
+
     CORS(app=app)
     db.init_app(app)
     api.init_app(app)

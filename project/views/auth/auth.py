@@ -1,8 +1,6 @@
 from flask_restx import Namespace
-from flask_restx import Resource, abort
+from flask_restx import Resource
 from flask import request
-from project.setup.api.models import user
-
 from project.container import user_service, auth_service
 
 api = Namespace('auth')
@@ -12,7 +10,6 @@ api = Namespace('auth')
 class RegisterView(Resource):
 
     @api.response(404, 'Not Found')
-    @api.marshal_with(user, code=201, description='OK')
     def post(self):
         """Создаем пользователя в системе"""
         req_json = request.json
@@ -37,8 +34,10 @@ class UserView(Resource):
     @api.response(404, "Not Found")
     def put(self):
         """Проверка токенов на валидность"""
-        req_json = request.json
-        access_token = req_json.get('access_token')
-        refresh_token = req_json.get('refresh_token')
-        return auth_service.approve_refresh_token(refresh_token, access_token), 204
-
+        try:
+            req_json = request.json
+            access_token = req_json.get('access_token')
+            refresh_token = req_json.get('refresh_token')
+            return auth_service.approve_refresh_token(refresh_token, access_token), 204
+        except Exception:
+            return "", 400

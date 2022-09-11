@@ -19,9 +19,11 @@ class BaseDAO(Generic[T]):
         return current_app.config['ITEMS_PER_PAGE']
 
     def get_by_id(self, pk: int) -> Optional[T]:
+        # Получение объекта по id
         return self._db_session.query(self.__model__).get(pk)
 
     def get_all(self, page: Optional[int] = None) -> List[T]:
+        # Получение всех объектов
         stmt: BaseQuery = self._db_session.query(self.__model__)
         if page:
             try:

@@ -24,12 +24,14 @@ class BaseConfig:
     RESTX_JSON = {
         'ensure_ascii': False,
     }
-    os.environ['FLASK_ENV'] = "testing"
+    os.environ['FLASK_ENV'] = "development"
 
 
 class TestingConfig(BaseConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SECRET_KEY = os.getenv('SECRET_KEY', 'secret_key')
+    JWT_ALGORITHM = "HS256"
 
 
 class DevelopmentConfig(BaseConfig):

@@ -66,4 +66,4 @@ class TestUserDAO:
         assert not user_dao.get_user(mail="test@gmail.com")
 
     def test_update(self, user_1, user_dao):
-        ...
+        user_dao.update(user_1)

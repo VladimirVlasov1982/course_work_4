@@ -16,5 +16,6 @@ def shell():
         "FavouriteMovie": FavouriteMovie,
     }
 
+
 if __name__ == "__main__":
     app.run()

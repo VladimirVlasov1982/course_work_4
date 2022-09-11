@@ -1,8 +1,6 @@
 from typing import Optional
 from flask_sqlalchemy import BaseQuery
-from sqlalchemy.orm import scoped_session
 from werkzeug.exceptions import NotFound
-
 from project.dao.base import BaseDAO
 from project.models import Genre, Director, Movie, User, FavouriteMovie
 
@@ -65,23 +63,26 @@ class FavouriteDAO(BaseDAO[FavouriteMovie]):
     """Класс Избранное"""
     __model__ = FavouriteMovie
 
-    def get_all_favourite_movies(self, user_id) -> list[Movie]:
+    def get_all_favourite_movies(self, user_id: int) -> list[Movie]:
         # Получение Избранного по id пользователя
         movies = self._db_session.query(Movie).join(FavouriteMovie).filter(FavouriteMovie.user_id == user_id).all()
         return movies
 
-    def create_favorite(self, user_id: int, movie_id: int) -> FavouriteMovie:
+    def create_favourite(self, user_id: int, movie_id: int) -> FavouriteMovie:
         # Добавление фильма в Избранное
-        favorite = FavouriteMovie(user_id=user_id, movie_id=movie_id)
-        self._db_session.add(favorite)
+        favourite = FavouriteMovie(user_id=user_id, movie_id=movie_id)
+        self._db_session.add(favourite)
         self._db_session.commit()
-        return favorite
+        return favourite
 
     def delete(self, movie_id: int) -> None:
         # Удаление фильма из Избранного
-        favorite = self._db_session.query(FavouriteMovie).filter(FavouriteMovie.movie_id == movie_id).first()
-        self._db_session.delete(favorite)
-        self._db_session.commit()
+        try:
+            favorite = self._db_session.query(FavouriteMovie).filter(FavouriteMovie.movie_id == movie_id).first()
+            self._db_session.delete(favorite)
+            self._db_session.commit()
+        except Exception:
+            self._db_session.rollback()
 
     def get_user(self, mail: str) -> User:
         # Получение пользователя

@@ -1,6 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
-
 from project.setup.db import models
 
 
