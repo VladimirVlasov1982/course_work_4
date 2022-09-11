@@ -46,4 +46,7 @@ flask run
 ```shell
 pytest .
 ```
-
+## Swagger
+```
+GET /docs
+```
