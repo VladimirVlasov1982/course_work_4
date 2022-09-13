@@ -1,3 +1,4 @@
+from sqlite3 import IntegrityError
 from typing import Optional
 from flask_sqlalchemy import BaseQuery
 from werkzeug.exceptions import NotFound
@@ -48,8 +49,11 @@ class UserDAO(BaseDAO[User]):
     def create(self, user_data: dict) -> User:
         # Создать пользователя
         user = User(**user_data)
-        self._db_session.add(user)
-        self._db_session.commit()
+        try:
+            self._db_session.add(user)
+            self._db_session.commit()
+        except IntegrityError:
+            raise ValueError("User with this email already exist. Choose the different email address")
         return user
 
     def update(self, user: User) -> User:

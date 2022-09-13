@@ -11,9 +11,9 @@ class AuthService:
     def __init__(self, user_service: UserService):
         self.user_service = user_service
 
-    def generate_tokens(self, mail: str, password: str, is_refresh=False) -> dict[str, str | int]:
+    def generate_tokens(self, email: str, password: str, is_refresh=False) -> dict[str, str | int]:
         # Генерация токена
-        user = self.user_service.get_user(mail)
+        user = self.user_service.get_user(email)
 
         if user is None:
             raise abort(404)
@@ -42,7 +42,7 @@ class AuthService:
         tokens = {"access_token": access_token, "refresh_token": refresh_token}
         return tokens
 
-    def check_token(self, token: bytes) -> bool:
+    def check_token(self, token: str) -> bool:
         # Проверяем токен на валидность
         try:
             jwt.decode(token, current_app.config.get('SECRET_KEY'),
@@ -51,13 +51,14 @@ class AuthService:
         except Exception:
             return False
 
-    def approve_refresh_token(self, refresh_token: bytes, access_token: bytes) -> dict[str, str | int]:
+    def approve_refresh_token(self, refresh_token: str) -> dict[str, str | int]:
         # Генерируем access_token и refresh_token
-        if not self.check_token(refresh_token) and self.check_token(access_token):
+
+        if not self.check_token(refresh_token):
             abort(400)
 
         data = jwt.decode(refresh_token, current_app.config.get('SECRET_KEY'),
                           algorithms=[current_app.config.get('JWT_ALGORITHM')])
 
-        mail = data.get('email')
-        return self.generate_tokens(mail, None, is_refresh=True)
+        email = data.get('email')
+        return self.generate_tokens(email, None, is_refresh=True)

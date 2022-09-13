@@ -37,3 +37,8 @@ favourite: Model = api.model('Избранное', {
     "movie_id": fields.Nested(movie),
 
 })
+
+tokens: Model = api.model('Токены', {
+    "access_token": fields.String(),
+    "refresh_token": fields.String(),
+})
